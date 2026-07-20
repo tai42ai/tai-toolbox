@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from tai_toolbox.tools.pad_embeddings import pad_embeddings
+from tai42_toolbox.tools.pad_embeddings import pad_embeddings
 
 
 def test_pad_embeddings_pads_single_vector() -> None:
@@ -29,5 +29,5 @@ def test_pad_embeddings_rejects_a_wider_vector() -> None:
 
 
 def test_registration(load_registrations: Callable[[str], Any]) -> None:
-    app = load_registrations("tai_toolbox.tools.pad_embeddings")
+    app = load_registrations("tai42_toolbox.tools.pad_embeddings")
     assert set(app.tools.registered) == {"pad_embeddings"}

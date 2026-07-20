@@ -7,10 +7,10 @@ from __future__ import annotations
 import asyncio
 
 import pytest
-from tai_kit.settings import reset_all_settings
+from tai42_kit.settings import reset_all_settings
 
-import tai_toolbox._internal.extensions.cache_store as cache_store_module
-from tai_toolbox._internal.extensions.cache_store import MISS, CacheSettings, CacheStore, cache_settings
+import tai42_toolbox._internal.extensions.cache_store as cache_store_module
+from tai42_toolbox._internal.extensions.cache_store import MISS, CacheSettings, CacheStore, cache_settings
 
 
 class _Clock:

@@ -3,11 +3,11 @@
 import asyncio
 import inspect
 
-from tai_contract.extensions import ExtensionKind
+from tai42_contract.extensions import ExtensionKind
 
-import tai_toolbox.extensions.cache as cache_module
-from tai_toolbox._internal.extensions import cache_store
-from tai_toolbox.extensions.cache import cache
+import tai42_toolbox.extensions.cache as cache_module
+from tai42_toolbox._internal.extensions import cache_store
+from tai42_toolbox.extensions.cache import cache
 
 
 def _tool(text: str) -> str:

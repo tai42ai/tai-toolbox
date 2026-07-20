@@ -10,7 +10,7 @@ from typing import Any
 
 import pytest
 
-from tai_toolbox.tools.generate_embeddings import generate_embeddings
+from tai42_toolbox.tools.generate_embeddings import generate_embeddings
 
 
 class _FakeEmbeddingModel:
@@ -34,7 +34,7 @@ def test_generate_embeddings_wraps_single_string(monkeypatch: pytest.MonkeyPatch
         captured["kwargs"] = kwargs
         return _FakeEmbeddingModel()
 
-    monkeypatch.setattr("tai_toolbox.tools.generate_embeddings.get_embedding_async", fake_get_embedding_async)
+    monkeypatch.setattr("tai42_toolbox.tools.generate_embeddings.get_embedding_async", fake_get_embedding_async)
 
     result = asyncio.run(generate_embeddings("hello", embedding_provider="openai"))
     assert result == [[5.0, 1.0]]
@@ -47,7 +47,7 @@ def test_generate_embeddings_handles_a_list(monkeypatch: pytest.MonkeyPatch) -> 
     async def fake_get_embedding_async(provider: str, **kwargs: Any) -> _FakeEmbeddingModel:
         return _FakeEmbeddingModel()
 
-    monkeypatch.setattr("tai_toolbox.tools.generate_embeddings.get_embedding_async", fake_get_embedding_async)
+    monkeypatch.setattr("tai42_toolbox.tools.generate_embeddings.get_embedding_async", fake_get_embedding_async)
 
     result = asyncio.run(generate_embeddings(["a", "bb", "ccc"], embedding_provider="openai"))
     assert result == [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0]]
@@ -57,20 +57,20 @@ def test_generate_embeddings_requires_async_embed(monkeypatch: pytest.MonkeyPatc
     async def fake_get_embedding_async(provider: str, **kwargs: Any) -> _SyncOnlyEmbeddingModel:
         return _SyncOnlyEmbeddingModel()
 
-    monkeypatch.setattr("tai_toolbox.tools.generate_embeddings.get_embedding_async", fake_get_embedding_async)
+    monkeypatch.setattr("tai42_toolbox.tools.generate_embeddings.get_embedding_async", fake_get_embedding_async)
 
     with pytest.raises(AttributeError, match="aembed_documents"):
         asyncio.run(generate_embeddings("hello", embedding_provider="openai"))
 
 
 def test_registration(load_registrations: Callable[[str], Any]) -> None:
-    app = load_registrations("tai_toolbox.tools.generate_embeddings")
+    app = load_registrations("tai42_toolbox.tools.generate_embeddings")
     assert set(app.tools.registered) == {"generate_embeddings"}
 
 
 def test_missing_extra_raises_install_hint(
     force_missing_import: Callable[[str, list[str]], None],
 ) -> None:
-    force_missing_import("langchain_core", ["tai_toolbox.tools.generate_embeddings", "tai_kit.llm.embedding"])
-    with pytest.raises(ImportError, match=r"tai-toolbox\[embeddings\]"):
-        importlib.import_module("tai_toolbox.tools.generate_embeddings")
+    force_missing_import("langchain_core", ["tai42_toolbox.tools.generate_embeddings", "tai42_kit.llm.embedding"])
+    with pytest.raises(ImportError, match=r"tai42-toolbox\[embeddings\]"):
+        importlib.import_module("tai42_toolbox.tools.generate_embeddings")

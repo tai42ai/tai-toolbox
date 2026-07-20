@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import asyncio
 
-from tai_toolbox._internal.tools import http_client
+from tai42_toolbox._internal.tools import http_client
 
 
 def test_distinct_key_sequential_guards_leave_map_empty() -> None:

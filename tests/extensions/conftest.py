@@ -1,6 +1,6 @@
 """Shared fixtures for the tool-extension tests.
 
-A toolbox module registers its tool extension through the global ``tai_app``
+A toolbox module registers its tool extension through the global ``tai42_app``
 handle at import time. These fixtures bind capturing or behavior-providing fake
 apps so a test can assert the registration (name, kind, and the
 ``requires_body_locality`` marker) or drive a composed
@@ -15,8 +15,8 @@ from types import ModuleType
 from typing import Any
 
 import pytest
-from tai_contract.app import tai_app
-from tai_contract.extensions import ExtensionKind
+from tai42_contract.app import tai42_app
+from tai42_contract.extensions import ExtensionKind
 
 
 class _NullTools:
@@ -116,13 +116,13 @@ def restore_null_app() -> Iterator[None]:
     """Rebind a stateless null app after every test so rebinding within a test
     never leaks into the next."""
     yield
-    tai_app.bind(_NullApp())
+    tai42_app.bind(_NullApp())
 
 
 @pytest.fixture
 def bind_fake_app() -> Callable[[FakeTools], None]:
     def _bind(tools: FakeTools) -> None:
-        tai_app.bind(FakeApp(tools))
+        tai42_app.bind(FakeApp(tools))
 
     return _bind
 
@@ -134,7 +134,7 @@ def capture_registration() -> Callable[[ModuleType], list[tuple[str, ExtensionKi
 
     def _capture(module: ModuleType) -> list[tuple[str, ExtensionKind, bool]]:
         app = CapturingApp()
-        tai_app.bind(app)
+        tai42_app.bind(app)
         importlib.reload(module)
         return app.extensions.registered
 

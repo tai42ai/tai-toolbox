@@ -7,11 +7,11 @@ import tomllib
 from pathlib import Path
 
 import yaml
-from tai_contract.plugins import PluginSpec
+from tai42_contract.plugins import PluginSpec
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _ROOT_SPEC = _REPO_ROOT / "tai-plugin.yml"
-_PACKAGED_SPEC = _REPO_ROOT / "src" / "tai_toolbox" / "tai-plugin.yml"
+_PACKAGED_SPEC = _REPO_ROOT / "src" / "tai42_toolbox" / "tai-plugin.yml"
 
 
 def _spec() -> PluginSpec:
@@ -37,7 +37,7 @@ def test_packaged_copy_is_declared_in_package_data():
     pyproject = tomllib.loads((_REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     package_data = pyproject["tool"]["setuptools"]["package-data"]
     owning = [key for key, patterns in package_data.items() if "tai-plugin.yml" in patterns]
-    assert owning == ["tai_toolbox"], (
+    assert owning == ["tai42_toolbox"], (
         "tai-plugin.yml must be declared in exactly one [tool.setuptools.package-data] entry "
         f"so the wheel ships it; found owners {owning}"
     )

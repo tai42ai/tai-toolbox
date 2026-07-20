@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a defect in tai-toolbox (the reference contrib tools + tool-extensions package)
+description: Report a defect in tai42-toolbox (the reference contrib tools + tool-extensions package)
 labels: ["bug"]
 body:
   - type: textarea
@@ -20,7 +20,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: tai-toolbox version
+      label: tai42-toolbox version
       placeholder: "0.1.0"
     validations:
       required: true
@@ -28,7 +28,7 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Python version, OS, and the tai-toolbox extras installed (e.g. tai-toolbox[embeddings]).
+      description: Python version, OS, and the tai42-toolbox extras installed (e.g. tai42-toolbox[embeddings]).
       placeholder: "Python 3.13.x, macOS 15"
     validations:
       required: true

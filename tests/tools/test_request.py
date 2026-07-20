@@ -1,9 +1,9 @@
 """Tests for the ``request`` tool entrypoint.
 
-The tool runs through tai-kit's real curl client, so the request is exercised
+The tool runs through tai42-kit's real curl client, so the request is exercised
 against a live local server (an httpx-level mock such as respx cannot intercept
 curl_cffi). The ``curl_app`` fixture binds an app whose ``clients.client_ctx``
-forwards to tai-kit's pool."""
+forwards to tai42-kit's pool."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from typing import Any
 
 import pytest
 
-from tai_toolbox.tools.request import request
+from tai42_toolbox.tools.request import request
 
 
 @pytest.mark.usefixtures("curl_app")
@@ -53,5 +53,5 @@ def test_request_reuses_a_keyed_session(local_server: Any) -> None:
 
 
 def test_registration(load_registrations: Callable[[str], Any]) -> None:
-    app = load_registrations("tai_toolbox.tools.request")
+    app = load_registrations("tai42_toolbox.tools.request")
     assert set(app.tools.registered) == {"request"}

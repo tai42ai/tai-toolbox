@@ -1,7 +1,7 @@
-"""Tests that the ``request`` tool honours the tai-kit SSRF guard.
+"""Tests that the ``request`` tool honours the tai42-kit SSRF guard.
 
 The guard itself (``resolve_and_validate``/``enforce_size`` and its policy) is
-unit-tested in tai-kit; these cases drive it through the ``request`` entrypoint
+unit-tested in tai42-kit; these cases drive it through the ``request`` entrypoint
 to prove the curl RESOLVE pin, the streamed size cap, and the no-follow-redirects
 behaviour honour it. All cases are deterministic: hosts are IP literals (no
 external DNS) or the loopback test server, and the guard policy is injected per
@@ -17,10 +17,10 @@ from typing import Any
 from urllib.parse import urlparse
 
 import pytest
-from tai_kit.net import url_guard
-from tai_kit.net.url_guard import UrlGuardError, UrlGuardSettings
+from tai42_kit.net import url_guard
+from tai42_kit.net.url_guard import UrlGuardError, UrlGuardSettings
 
-from tai_toolbox.tools.request import request
+from tai42_toolbox.tools.request import request
 
 
 def _enable(monkeypatch: pytest.MonkeyPatch, **kwargs: Any) -> UrlGuardSettings:
@@ -226,7 +226,7 @@ def test_http_tool_pins_a_caller_proxy_to_its_validated_ip(monkeypatch: pytest.M
     destination pin."""
     from curl_cffi import CurlOpt
 
-    from tai_toolbox._internal.tools import http_client
+    from tai42_toolbox._internal.tools import http_client
 
     _enable(monkeypatch)
 
@@ -236,7 +236,7 @@ def test_http_tool_pins_a_caller_proxy_to_its_validated_ip(monkeypatch: pytest.M
     monkeypatch.setattr(url_guard, "resolve_and_validate", resolve)
 
     session = _FakeSession()
-    monkeypatch.setattr(http_client, "tai_app", _FakeApp(session))
+    monkeypatch.setattr(http_client, "tai42_app", _FakeApp(session))
 
     asyncio.run(
         request(
@@ -254,7 +254,7 @@ def test_http_tool_pins_a_caller_proxy_to_its_validated_ip(monkeypatch: pytest.M
 def test_validate_proxies_returns_pins_for_each_proxy(monkeypatch: pytest.MonkeyPatch) -> None:
     """``_validate_proxies`` returns a curl ``--resolve`` pin per proxy, taking the
     port from the URL and the scheme default (https 443, socks 1080, else 80)."""
-    from tai_toolbox._internal.tools.http_client import _validate_proxies
+    from tai42_toolbox._internal.tools.http_client import _validate_proxies
 
     _enable(monkeypatch)
 
@@ -277,7 +277,7 @@ def test_validate_proxies_returns_pins_for_each_proxy(monkeypatch: pytest.Monkey
 
 
 def test_validate_proxies_rejects_a_hostless_proxy_url(monkeypatch: pytest.MonkeyPatch) -> None:
-    from tai_toolbox._internal.tools.http_client import _validate_proxies
+    from tai42_toolbox._internal.tools.http_client import _validate_proxies
 
     _enable(monkeypatch)
     with pytest.raises(UrlGuardError, match="no host"):
@@ -287,7 +287,7 @@ def test_validate_proxies_rejects_a_hostless_proxy_url(monkeypatch: pytest.Monke
 def test_validate_proxies_rejects_an_out_of_range_port(monkeypatch: pytest.MonkeyPatch) -> None:
     """An out-of-range proxy port fails with a domain-specific ``UrlGuardError`` that
     names the host but redacts the userinfo, never leaking the credentials."""
-    from tai_toolbox._internal.tools.http_client import _validate_proxies
+    from tai42_toolbox._internal.tools.http_client import _validate_proxies
 
     _enable(monkeypatch)
     with pytest.raises(UrlGuardError, match="out-of-range port") as excinfo:
@@ -300,7 +300,7 @@ def test_validate_proxies_rejects_an_out_of_range_port(monkeypatch: pytest.Monke
 def test_validate_proxies_checks_the_port_before_resolving(monkeypatch: pytest.MonkeyPatch) -> None:
     """The port is validated before any DNS lookup, so an out-of-range port fails
     fast without ``resolve_and_validate`` ever running for that URL."""
-    from tai_toolbox._internal.tools.http_client import _validate_proxies
+    from tai42_toolbox._internal.tools.http_client import _validate_proxies
 
     _enable(monkeypatch)
 
@@ -322,7 +322,7 @@ def test_validate_proxies_hostless_userinfo_url_does_not_leak_credentials(
 ) -> None:
     """A hostless proxy URL that carries userinfo is rejected, and the credentials
     are redacted out of the error message."""
-    from tai_toolbox._internal.tools.http_client import _validate_proxies
+    from tai42_toolbox._internal.tools.http_client import _validate_proxies
 
     _enable(monkeypatch)
     with pytest.raises(UrlGuardError) as excinfo:
@@ -334,7 +334,7 @@ def test_redact_userinfo_masks_credentials() -> None:
     """``_redact_userinfo`` masks ``user:pass@`` credentials while preserving the
     host and path. A URL with no userinfo is returned unchanged, and an ``@`` inside
     the credentials does not detach the host (the last ``@`` separates userinfo)."""
-    from tai_toolbox._internal.tools.http_client import _redact_userinfo
+    from tai42_toolbox._internal.tools.http_client import _redact_userinfo
 
     assert _redact_userinfo("http://u:p@h.example:8080/x") == "http://***@h.example:8080/x"
     assert _redact_userinfo("http://h.example:8080/x") == "http://h.example:8080/x"
@@ -345,7 +345,7 @@ def test_resolve_pin_entry_brackets_ipv6() -> None:
     """The curl ``--resolve`` pin brackets an IPv6 address (its colons would
     otherwise collide with the ``host:port:address`` field separators) and leaves
     an IPv4 address unbracketed."""
-    from tai_toolbox._internal.tools.http_client import _resolve_pin_entry
+    from tai42_toolbox._internal.tools.http_client import _resolve_pin_entry
 
     assert _resolve_pin_entry("example.com", 443, "203.0.113.5") == "example.com:443:203.0.113.5"
     assert _resolve_pin_entry("example.com", 443, "2001:db8::1") == "example.com:443:[2001:db8::1]"
@@ -355,7 +355,7 @@ def test_resolve_pin_entry_brackets_an_ipv6_host() -> None:
     """An IPv6-literal proxy or destination host is bracketed on the host side of
     the ``host:port:address`` triple too — its own colons would otherwise collide
     with the field separators. A plain hostname or IPv4 host stays unbracketed."""
-    from tai_toolbox._internal.tools.http_client import _resolve_pin_entry
+    from tai42_toolbox._internal.tools.http_client import _resolve_pin_entry
 
     assert _resolve_pin_entry("2001:db8::1", 8080, "203.0.113.9") == "[2001:db8::1]:8080:203.0.113.9"
     assert _resolve_pin_entry("2001:db8::1", 8080, "2001:db8::2") == "[2001:db8::1]:8080:[2001:db8::2]"
@@ -371,7 +371,7 @@ def test_http_tool_serializes_concurrent_same_key_pins(monkeypatch: pytest.Monke
     first host would DNS-fail at connect. The lock serializes the [set pin +
     request + body read] critical section, so both reach their own pinned target.
     """
-    from tai_toolbox._internal.tools import http_client
+    from tai42_toolbox._internal.tools import http_client
 
     _enable(monkeypatch, allow_cidrs=["127.0.0.0/8"])
     local_server.configure(body=b"ok", content_type="text/plain")

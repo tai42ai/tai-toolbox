@@ -5,11 +5,11 @@ import inspect
 
 import pytest
 from prometheus_client import REGISTRY
-from tai_contract.extensions import ExtensionKind
+from tai42_contract.extensions import ExtensionKind
 
-import tai_toolbox.extensions.prometheus as prometheus_module
-from tai_toolbox._internal.extensions.prometheus_counters import prometheus_settings
-from tai_toolbox.extensions.prometheus import prometheus_metrics
+import tai42_toolbox.extensions.prometheus as prometheus_module
+from tai42_toolbox._internal.extensions.prometheus_counters import prometheus_settings
+from tai42_toolbox.extensions.prometheus import prometheus_metrics
 
 from .conftest import FakeTools
 

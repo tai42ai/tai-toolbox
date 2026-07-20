@@ -6,13 +6,13 @@ import time
 from typing import Any
 
 import pytest
-import tai_kit.utils.data.jq_util as jq_util
-from tai_contract.extensions import ExtensionKind
-from tai_kit.settings import reset_all_settings
+import tai42_kit.utils.data.jq_util as jq_util
+from tai42_contract.extensions import ExtensionKind
+from tai42_kit.settings import reset_all_settings
 
-import tai_toolbox.extensions.chain as chain_module
-from tai_toolbox._internal.extensions.chain_executor import execute_chain
-from tai_toolbox.extensions.chain import chain
+import tai42_toolbox.extensions.chain as chain_module
+from tai42_toolbox._internal.extensions.chain_executor import execute_chain
+from tai42_toolbox.extensions.chain import chain
 
 from .conftest import FakeTools
 
@@ -76,7 +76,7 @@ def test_chains_first_tool_through_jq_into_second(bind_fake_app):
 
 def test_jq_expression_evaluates_off_loop_and_value_round_trips(bind_fake_app):
     # The authored jq expression is evaluated through the off-loop helper
-    # (tai_kit.utils.data.run_jq_first). A non-trivial transform must compute the
+    # (tai42_kit.utils.data.run_jq_first). A non-trivial transform must compute the
     # same result and reach the second tool intact.
     received: dict[str, Any] = {}
 

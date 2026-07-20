@@ -15,6 +15,6 @@ import pytest
 def test_missing_extra_raises_install_hint(
     force_missing_import: Callable[[str, list[str]], None],
 ) -> None:
-    force_missing_import("curl_cffi", ["tai_toolbox._internal.tools.http_client", "tai_kit.clients.impl.curl"])
-    with pytest.raises(ImportError, match=r"tai-toolbox\[http\]"):
-        importlib.import_module("tai_toolbox._internal.tools.http_client")
+    force_missing_import("curl_cffi", ["tai42_toolbox._internal.tools.http_client", "tai42_kit.clients.impl.curl"])
+    with pytest.raises(ImportError, match=r"tai42-toolbox\[http\]"):
+        importlib.import_module("tai42_toolbox._internal.tools.http_client")

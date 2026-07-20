@@ -5,12 +5,12 @@ import inspect
 from typing import Any
 
 import pytest
-from tai_contract.extensions import ExtensionKind
+from tai42_contract.extensions import ExtensionKind
 
-import tai_toolbox._internal.extensions.batch_executor as batch_executor
-import tai_toolbox.extensions.batch as batch_module
-from tai_toolbox._internal.extensions.batch_executor import BatchSettings, execute_batch
-from tai_toolbox.extensions.batch import batch
+import tai42_toolbox._internal.extensions.batch_executor as batch_executor
+import tai42_toolbox.extensions.batch as batch_module
+from tai42_toolbox._internal.extensions.batch_executor import BatchSettings, execute_batch
+from tai42_toolbox.extensions.batch import batch
 
 from .conftest import FakeTools
 

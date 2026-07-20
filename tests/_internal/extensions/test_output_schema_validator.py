@@ -4,9 +4,9 @@ import asyncio
 
 import pytest
 from pydantic import BaseModel
-from tai_kit.utils.data.json_schema_util import JsonSchemaValidationError
+from tai42_kit.utils.data.json_schema_util import JsonSchemaValidationError
 
-from tai_toolbox._internal.extensions.output_schema_validator import enforce_output_schema
+from tai42_toolbox._internal.extensions.output_schema_validator import enforce_output_schema
 
 _SCHEMA = {
     "type": "object",

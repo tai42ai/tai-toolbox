@@ -1,7 +1,7 @@
 """Registration-capture fixture for the tool entrypoint tests.
 
 Toolbox is contract-facing and cannot import the skeleton app, so a capturing
-``tai_app`` records what each module registers when it is (re)imported, letting a
+``tai42_app`` records what each module registers when it is (re)imported, letting a
 test assert the tool name. The server, curl, guard, and missing-import fixtures
 these tests also use live in the root ``conftest`` because the ``_internal``
 helper tests share them.
@@ -15,11 +15,11 @@ from collections.abc import Callable, Iterator
 from typing import Any, cast
 
 import pytest
-from tai_contract.app import tai_app
+from tai42_contract.app import tai42_app
 
 
 class _CaptureTools:
-    """Records every tool registered through ``tai_app.tools.tool``."""
+    """Records every tool registered through ``tai42_app.tools.tool``."""
 
     def __init__(self) -> None:
         self.registered: dict[str, Callable[..., Any]] = {}
@@ -45,11 +45,11 @@ def load_registrations() -> Iterator[Callable[[str], _CaptureApp]]:
     The previously bound app is restored afterwards so other tests are
     unaffected.
     """
-    previous = cast("Any", tai_app)._impl
+    previous = cast("Any", tai42_app)._impl
 
     def load(module_name: str) -> _CaptureApp:
         app = _CaptureApp()
-        tai_app.bind(app)
+        tai42_app.bind(app)
         if module_name in sys.modules:
             importlib.reload(sys.modules[module_name])
         else:
@@ -57,4 +57,4 @@ def load_registrations() -> Iterator[Callable[[str], _CaptureApp]]:
         return app
 
     yield load
-    tai_app.bind(previous)
+    tai42_app.bind(previous)

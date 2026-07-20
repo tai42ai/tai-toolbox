@@ -1,7 +1,7 @@
-"""Bind a null app to the ``tai_app`` handle before any toolbox import, and
+"""Bind a null app to the ``tai42_app`` handle before any toolbox import, and
 provide the fixtures shared across the tool and helper test suites.
 
-Toolbox modules register their tool or tool extension through ``tai_app`` at
+Toolbox modules register their tool or tool extension through ``tai42_app`` at
 import time, mirroring how the host binds the app and then loads the module named
 by the manifest. Binding a no-op app here lets the suite import a module without
 an unbound-handle error; individual tests rebind to a capturing or
@@ -23,8 +23,8 @@ from collections.abc import Callable, Iterator
 from typing import Any, cast
 
 import pytest
-from tai_contract.app import tai_app
-from tai_kit.clients import client_ctx as _kit_client_ctx
+from tai42_contract.app import tai42_app
+from tai42_kit.clients import client_ctx as _kit_client_ctx
 
 
 class _NullTools:
@@ -61,11 +61,11 @@ class _NullApp:
     extensions = _NullExtensions()
 
 
-tai_app.bind(_NullApp())
+tai42_app.bind(_NullApp())
 
 
 class _KitClients:
-    """Forwards ``client_ctx`` to tai-kit's real pooled facade."""
+    """Forwards ``client_ctx`` to tai42-kit's real pooled facade."""
 
     def client_ctx(self, client_cls: Any, settings: Any = None, *, fresh: bool = False, **kwargs: Any) -> Any:
         return _kit_client_ctx(client_cls, settings, fresh=fresh, **kwargs)
@@ -77,12 +77,12 @@ class _ClientsApp:
 
 @pytest.fixture
 def curl_app() -> Iterator[None]:
-    """Bind an app whose ``clients.client_ctx`` is tai-kit's real pool, so the
+    """Bind an app whose ``clients.client_ctx`` is tai42-kit's real pool, so the
     ``http`` tool runs against a live curl session. Restores the prior app."""
-    previous = cast("Any", tai_app)._impl
-    tai_app.bind(_ClientsApp())
+    previous = cast("Any", tai42_app)._impl
+    tai42_app.bind(_ClientsApp())
     yield
-    tai_app.bind(previous)
+    tai42_app.bind(previous)
 
 
 class _ConfigurableHandler(http.server.BaseHTTPRequestHandler):
@@ -170,7 +170,7 @@ def _guard_disabled_by_default(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch."""
     import os
 
-    from tai_kit.net import url_guard
+    from tai42_kit.net import url_guard
 
     for key in list(os.environ):
         if key.startswith("TAI_URL_GUARD_"):

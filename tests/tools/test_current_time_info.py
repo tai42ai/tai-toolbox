@@ -7,7 +7,7 @@ import asyncio
 from collections.abc import Callable
 from typing import Any
 
-from tai_toolbox.tools.current_time_info import current_time_info
+from tai42_toolbox.tools.current_time_info import current_time_info
 
 
 def test_current_time_info_shape() -> None:
@@ -32,5 +32,5 @@ def test_current_time_info_shape() -> None:
 
 
 def test_registration(load_registrations: Callable[[str], Any]) -> None:
-    app = load_registrations("tai_toolbox.tools.current_time_info")
+    app = load_registrations("tai42_toolbox.tools.current_time_info")
     assert set(app.tools.registered) == {"current_time_info"}

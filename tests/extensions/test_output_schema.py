@@ -5,15 +5,15 @@ import inspect
 
 import pytest
 from fastmcp.tools.function_parsing import ParsedFunction
-from tai_contract.extensions import ExtensionKind
-from tai_kit.utils.data.json_schema_util import (
+from tai42_contract.extensions import ExtensionKind
+from tai42_kit.utils.data.json_schema_util import (
     InvalidJsonSchemaError,
     JsonSchemaValidationError,
 )
 
-import tai_toolbox.extensions.output_schema as output_schema_module
-from tai_toolbox.extensions.cache import cache
-from tai_toolbox.extensions.output_schema import output_schema
+import tai42_toolbox.extensions.output_schema as output_schema_module
+from tai42_toolbox.extensions.cache import cache
+from tai42_toolbox.extensions.output_schema import output_schema
 
 _USER_SCHEMA = {
     "type": "object",

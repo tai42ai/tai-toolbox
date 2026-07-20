@@ -1,4 +1,4 @@
-# tai-toolbox
+# tai42-toolbox
 
 [![CI](https://github.com/tai42ai/tai-toolbox/actions/workflows/ci.yml/badge.svg)](https://github.com/tai42ai/tai-toolbox/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -8,10 +8,10 @@ collection of generic **tools** and **tool extensions**.
 
 > A plugin extends the platform; a *tool extension* extends a single tool.
 
-Everything here registers through the `tai_app` handle from `tai_contract.app`
+Everything here registers through the `tai42_app` handle from `tai42_contract.app`
 and is loaded by the host from the manifest (`tools[].module` /
-`extensions_modules`). Its only tai-* dependencies are `tai-contract` (the
-interfaces it registers through) and `tai-kit` (the curl client, the jq
+`extensions_modules`). Its only tai-* dependencies are `tai42-contract` (the
+interfaces it registers through) and `tai42-kit` (the curl client, the jq
 compiler, and the llm/embedding factories the heavier modules wire to). It
 **never** imports the skeleton — the toolbox is contract-facing.
 
@@ -19,25 +19,25 @@ compiler, and the llm/embedding factories the heavier modules wire to). It
 
 Requires **Python 3.13+**. Nothing is on PyPI yet, so install from source — clone
 this repo and add it as an editable dependency of the environment that runs the
-server (or let it ride in through `tai-skeleton`'s `[toolbox]` extra):
+server (or let it ride in through `tai42-skeleton`'s `[toolbox]` extra):
 
 ```bash
 git clone https://github.com/tai42ai/tai-toolbox
 cd tai-skeleton   # or your own app checkout
-uv add --editable ../tai-toolbox            # once published: uv add tai-toolbox
+uv add --editable ../tai-toolbox            # once published: uv add tai42-toolbox
 uv add --editable "../tai-toolbox[http]"    # add only the extras you use
 ```
 
 The base install stays light. Each heavier module is gated behind its own extra;
 a module whose extra is missing fails loudly at import with an
-`install tai-toolbox[extra]` hint — never a silent skip.
+`install tai42-toolbox[extra]` hint — never a silent skip.
 
 | Extra | Pulls | Backs |
 |---|---|---|
-| `http` | `tai-kit[curl]` | the `request` tool |
+| `http` | `tai42-kit[curl]` | the `request` tool |
 | `prometheus` | `prometheus-client` | the `prometheus_metrics` tool extension |
-| `chain` | `tai-kit[jq]` | the `chain` tool extension |
-| `embeddings` | `tai-kit[llm]` | the `generate_embeddings` and `pad_embeddings` tools |
+| `chain` | `tai42-kit[jq]` | the `chain` tool extension |
+| `embeddings` | `tai42-kit[llm]` | the `generate_embeddings` and `pad_embeddings` tools |
 | `proxy` | `PySocks` | SOCKS routing in the `proxy` tool extension (its HTTP/HTTPS path is stdlib-only) |
 
 ## Catalog
@@ -45,7 +45,7 @@ a module whose extra is missing fails loudly at import with an
 One row per registered artifact. **Kind** is the `ExtensionKind` for a tool
 extension (Wrapper / Transformer) or `Tool` for a tool. **Extra** is the gating
 optional dependency, or `—` when the module needs none. A gated module whose
-extra is not installed fails loudly at import with an `install tai-toolbox[extra]`
+extra is not installed fails loudly at import with an `install tai42-toolbox[extra]`
 hint — never a silent skip.
 
 ### Tool extensions
@@ -65,7 +65,7 @@ hint — never a silent skip.
 |---|---|---|---|
 | `generate_embeddings` | Tool | `embeddings` | Generates embedding vectors for a string or list of strings via the configured provider. |
 | `pad_embeddings` | Tool | `embeddings` | Pads embedding vectors with zeros up to a fixed width; raises rather than truncating a vector already wider than the target. |
-| `request` | Tool | `http` | Executes an HTTP request through tai-kit's pooled curl client, with optional keyed session reuse (shared cookies and connections). |
+| `request` | Tool | `http` | Executes an HTTP request through tai42-kit's pooled curl client, with optional keyed session reuse (shared cookies and connections). |
 | `generate_uuid` | Tool | `—` | Generates a random version-4 UUID. |
 | `current_time_info` | Tool | `—` | Returns the current time as a structured object (UTC, local, and high-precision system timestamps). |
 
@@ -76,8 +76,8 @@ server-side, so an agent steered by a poisoned page could aim it at internal-onl
 services or the cloud metadata endpoint. A guard is **on by default**: it resolves
 each target host and refuses any address that is private, loopback, link-local,
 reserved, multicast, or unspecified, and refuses a response larger than a cap
-(loudly, never truncated). The guard itself lives in tai-kit
-(`tai_kit.net.url_guard`) and is shared with kit's `fetch_url` download; configure
+(loudly, never truncated). The guard itself lives in tai42-kit
+(`tai42_kit.net.url_guard`) and is shared with kit's `fetch_url` download; configure
 it with `TAI_URL_GUARD_`-prefixed settings:
 
 | Setting | Default | Meaning |
@@ -163,7 +163,7 @@ uv run pyright
 uv run pytest
 ```
 
-`[tool.uv.sources]` resolves `tai-contract` and `tai-kit` from sibling checkouts
+`[tool.uv.sources]` resolves `tai42-contract` and `tai42-kit` from sibling checkouts
 for local development; the published wheel floors them from the index.
 
 ## License

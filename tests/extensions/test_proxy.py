@@ -12,25 +12,25 @@ from typing import cast
 import pytest
 import trustme
 from pydantic import ValidationError
-from tai_contract.extensions import ExtensionKind
-from tai_kit.net import url_guard
-from tai_kit.net.url_guard import UrlGuardError, UrlGuardSettings
+from tai42_contract.extensions import ExtensionKind
+from tai42_kit.net import url_guard
+from tai42_kit.net.url_guard import UrlGuardError, UrlGuardSettings
 
-import tai_toolbox._internal.extensions.proxy_context as proxy_context_module
-import tai_toolbox.extensions.proxy as proxy_module
-from tai_toolbox._internal.extensions.proxy_context import (
+import tai42_toolbox._internal.extensions.proxy_context as proxy_context_module
+import tai42_toolbox.extensions.proxy as proxy_module
+from tai42_toolbox._internal.extensions.proxy_context import (
     ProxySettings,
     _select_proxy_url,
     build_route,
 )
-from tai_toolbox._internal.extensions.socket_routing import (
+from tai42_toolbox._internal.extensions.socket_routing import (
     RouteConfig,
     RoutingSocket,
     active_route,
     install_dispatcher,
     route,
 )
-from tai_toolbox.extensions.proxy import proxy
+from tai42_toolbox.extensions.proxy import proxy
 
 
 @pytest.fixture(autouse=True)
@@ -964,7 +964,7 @@ def test_build_route_socks_missing_extra_raises_install_hint(monkeypatch):
 
     _settings(monkeypatch, pool=["socks5://proxy.example:1080"])
     monkeypatch.setitem(sys.modules, "socks", None)
-    with pytest.raises(ImportError, match=r"tai-toolbox\[proxy\]"):
+    with pytest.raises(ImportError, match=r"tai42-toolbox\[proxy\]"):
         asyncio.run(build_route(None))
 
 
@@ -1073,7 +1073,7 @@ def test_caller_proxy_not_guarded_when_guard_disabled(monkeypatch):
 
 
 def test_proxy_settings_returns_a_proxy_settings_instance():
-    from tai_toolbox._internal.extensions.proxy_context import proxy_settings
+    from tai42_toolbox._internal.extensions.proxy_context import proxy_settings
 
     assert isinstance(proxy_settings(), ProxySettings)
 

@@ -1,9 +1,9 @@
-# Contributing to tai-toolbox
+# Contributing to tai42-toolbox
 
-`tai-toolbox` is the reference contrib package of generic **tools** and **tool
+`tai42-toolbox` is the reference contrib package of generic **tools** and **tool
 extensions** for the TAI ecosystem. The hard rule (the plugin rule): **it depends
-on `tai-contract` + `tai-kit` only and never imports the skeleton.** Everything
-registers through the `tai_app` handle from `tai_contract.app` and is loaded by
+on `tai42-contract` + `tai42-kit` only and never imports the skeleton.** Everything
+registers through the `tai42_app` handle from `tai42_contract.app` and is loaded by
 the host from the manifest (`tools[].module` / `extensions_modules`) by dynamic
 import — there is no import edge to the skeleton in either direction.
 
@@ -14,12 +14,12 @@ import — there is no import edge to the skeleton in either direction.
 - **No skeleton import — ever.** The package is contract-facing; the ban is
   enforced by ruff (`flake8-tidy-imports`), so a stray import fails lint:
   ```bash
-  grep -rn "tai_skeleton" src/   # must be empty
+  grep -rn "tai42_skeleton" src/   # must be empty
   ```
-- **The base install stays light.** Only `tai-contract`, `tai-kit`, and
+- **The base install stays light.** Only `tai42-contract`, `tai42-kit`, and
   `makefun` are base dependencies. Every heavier dependency is opt-in behind its
   own extra; a module whose extra is missing must fail loudly at import with a
-  copy-pasteable `install tai-toolbox[extra]` hint — never a silent skip.
+  copy-pasteable `install tai42-toolbox[extra]` hint — never a silent skip.
 - **Loud errors.** No swallowed exceptions, silent fallbacks, or silent
   truncation. A bound exceeded, a missing input, or a failed sub-step raises.
 - **Typed package** (`py.typed`). Pyright runs clean; a missing optional backing
@@ -27,12 +27,12 @@ import — there is no import edge to the skeleton in either direction.
 
 ## Layout
 
-- `src/tai_toolbox/extensions/` — the tool extensions (`cache`, `proxy`,
+- `src/tai42_toolbox/extensions/` — the tool extensions (`cache`, `proxy`,
   `prometheus`, `batch`, `chain`, `output_schema`), each registered with its
   `ExtensionKind`.
-- `src/tai_toolbox/tools/` — the tools (`generate_embeddings`, `pad_embeddings`,
+- `src/tai42_toolbox/tools/` — the tools (`generate_embeddings`, `pad_embeddings`,
   `request`, `generate_uuid`, `current_time_info`).
-- `src/tai_toolbox/_internal/` — private helpers, kept out of the public surface
+- `src/tai42_toolbox/_internal/` — private helpers, kept out of the public surface
   by the package name (e.g. `_internal/tools/http_client.py`,
   `_internal/extensions/socket_routing.py`, `_internal/extensions/signature.py`).
 - `tests/` mirrors `src/` (`tests/extensions/`, `tests/tools/`).
