@@ -1,0 +1,34 @@
+name: Bug report
+description: Report a defect in tai42-toolbox (the reference contrib tools + tool-extensions package)
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps or code that reproduce the problem.
+      render: python
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: tai42-toolbox version
+      placeholder: "0.1.1"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Python version, OS, and the tai42-toolbox extras installed (e.g. tai42-toolbox[embeddings]).
+      placeholder: "Python 3.13.x, macOS 15"
+    validations:
+      required: true
