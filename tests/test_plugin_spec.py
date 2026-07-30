@@ -31,6 +31,11 @@ def test_plugin_spec_matches_the_project_metadata():
     assert spec.package == project["name"]
     assert spec.version == project["version"]
     assert spec.description == project["description"]
+    # The yml's contract range and pyproject's tai42-contract specifier must be
+    # the same string: the marketplace validates installs against the yml while
+    # pip resolves pyproject, so drift makes the package uninstallable.
+    (contract_requirement,) = [dep for dep in project["dependencies"] if dep.startswith("tai42-contract")]
+    assert spec.contract == contract_requirement.removeprefix("tai42-contract")
 
 
 def test_packaged_copy_is_declared_in_package_data():
