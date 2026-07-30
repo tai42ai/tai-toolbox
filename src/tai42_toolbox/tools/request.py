@@ -14,7 +14,7 @@ from tai42_contract.app import tai42_app
 from tai42_toolbox._internal.tools.http_client import perform_request
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"http"})
 async def request(
     url: str,
     method: str = "GET",

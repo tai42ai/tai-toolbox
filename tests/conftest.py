@@ -20,14 +20,17 @@ from tai42_kit.clients import client_ctx as _kit_client_ctx
 
 
 class _NullTools:
-    def tool(self, func: Callable[..., Any] | None = None, /, *args: Any, **kwargs: Any) -> Any:
-        if callable(func):
-            return func
+    def __init__(self) -> None:
+        self.tags: dict[str, set[str]] = {}
 
-        def decorate(f: Callable[..., Any]) -> Callable[..., Any]:
+    def tool(self, func: Callable[..., Any] | None = None, /, *args: Any, **kwargs: Any) -> Any:
+        tags = kwargs.get("tags", set())
+
+        def record(f: Callable[..., Any]) -> Callable[..., Any]:
+            self.tags[f.__name__] = tags
             return f
 
-        return decorate
+        return record(func) if callable(func) else record
 
 
 class _NullExtensions:
@@ -53,7 +56,13 @@ class _NullApp:
     extensions = _NullExtensions()
 
 
-tai42_app.bind(_NullApp())
+_null_app = _NullApp()
+tai42_app.bind(_null_app)
+
+
+@pytest.fixture
+def null_app() -> _NullApp:
+    return _null_app
 
 
 class _KitClients:

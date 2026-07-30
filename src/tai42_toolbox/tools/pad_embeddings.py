@@ -9,7 +9,7 @@ from __future__ import annotations
 from tai42_contract.app import tai42_app
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"embeddings"})
 def pad_embeddings(
     embeddings: list[float] | list[list[float]],
     target_dim: int = 3072,

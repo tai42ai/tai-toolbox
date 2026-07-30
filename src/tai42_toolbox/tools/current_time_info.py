@@ -12,7 +12,7 @@ from typing import Any
 from tai42_contract.app import tai42_app
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"time"})
 async def current_time_info() -> dict[str, Any]:
     """Return the current time as a structured object.
 

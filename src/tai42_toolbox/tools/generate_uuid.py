@@ -10,7 +10,7 @@ import uuid
 from tai42_contract.app import tai42_app
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"uuid"})
 def generate_uuid() -> str:
     """Generate a random UUID (version 4)."""
     return str(uuid.uuid4())

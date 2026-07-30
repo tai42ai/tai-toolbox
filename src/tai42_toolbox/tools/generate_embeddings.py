@@ -20,7 +20,7 @@ from tai42_contract.app import tai42_app
 from tai42_kit.llm.settings import embedding_settings, llm_provider_settings
 
 
-@tai42_app.tools.tool
+@tai42_app.tools.tool(tags={"embeddings"})
 async def generate_embeddings(
     texts: str | list[str],
     embedding_provider: str | None = None,
