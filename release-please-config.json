@@ -5,7 +5,11 @@
   "packages": {
     ".": {
       "skip-changelog": true,
-      "package-name": "tai42-toolbox"
+      "package-name": "tai42-toolbox",
+      "extra-files": [
+        "tai-plugin.yml",
+        "src/tai42_toolbox/tai-plugin.yml"
+      ]
     }
   }
 }
